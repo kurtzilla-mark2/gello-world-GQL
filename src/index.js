@@ -13,8 +13,9 @@ import Routes from './routes';
 const networkInterface = createNetworkInterface({
   uri:
     process.env.ENVIRONMENT !== 'development'
-      ? '/graphql'
-      : 'http://localhost:3000/graphql',
+      ? `${process.env.SERVER_GRAPHQL_ENDPOINT}`
+      : `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}${process.env
+          .SERVER_GRAPHQL_ENDPOINT}`,
 });
 
 networkInterface.use([
