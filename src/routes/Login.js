@@ -1,38 +1,40 @@
-import React from "react";
-import { Button, Input } from "antd";
-import { gql, graphql } from "react-apollo";
-import jwtDecode from "jwt-decode";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Button, Input } from 'antd';
+import { gql, graphql } from 'react-apollo';
+// import jwtDecode from 'jwt-decode';
 
 class Login extends React.Component {
   state = {
-    email: "",
-    password: ""
+    email: '',
+    password: '',
   };
 
   onChange = e => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   onSubmit = async () => {
     try {
       const response = await this.props.mutate({
-        variables: this.state
+        variables: this.state,
       });
       const { token, refreshToken } = response.data.login;
-      localStorage.setItem("token", token);
-      localStorage.setItem("refreshToken", refreshToken);
-      console.log("login worked!");
-      console.log(jwtDecode(token));
+      localStorage.setItem('token', token);
+      localStorage.setItem('refreshToken', refreshToken);
+      // console.log('login worked!');
+      // console.log(jwtDecode(token));
     } catch (e) {
-      console.log("login failed!");
-      console.log(e);
+      // console.log('login failed!');
+      // console.log(e);
+      throw new Error(e);
     }
   };
 
   facebookLogin = () => {
-    window.location = "http://localhost:3000/flogin";
+    window.location = 'http://localhost:3000/flogin';
   };
 
   render() {
@@ -71,5 +73,9 @@ const mutation = gql`
     }
   }
 `;
+
+Login.propTypes = {
+  mutate: PropTypes.func.isRequired,
+};
 
 export default graphql(mutation)(Login);

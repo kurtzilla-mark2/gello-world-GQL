@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
 import { Image } from 'cloudinary-react';
 
@@ -25,6 +26,13 @@ const getChampionQuery = gql`
     }
   }
 `;
+
+Champion.propTypes = {
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    getChampion: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default graphql(getChampionQuery, {
   options: ({ match }) => ({

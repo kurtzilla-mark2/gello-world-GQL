@@ -1,6 +1,7 @@
-import React from "react";
-import Downshift from "downshift";
-import { gql, graphql } from "react-apollo";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Downshift from 'downshift';
+import { gql, graphql } from 'react-apollo';
 
 const BasicAutocomplete = ({ items, onChange }) => (
   <Downshift onChange={onChange}>
@@ -10,17 +11,17 @@ const BasicAutocomplete = ({ items, onChange }) => (
       isOpen,
       inputValue,
       selectedItem,
-      highlightedIndex
+      highlightedIndex,
     }) => (
       <div>
-        <input {...getInputProps({ placeholder: "Search a book!" })} />
+        <input {...getInputProps({ placeholder: 'Search a book!' })} />
         {isOpen ? (
-          <div style={{ border: "1px solid #ccc" }}>
+          <div style={{ border: '1px solid #ccc' }}>
             {items
               .filter(
                 i =>
                   !inputValue ||
-                  i.title.toLowerCase().includes(inputValue.toLowerCase())
+                  i.title.toLowerCase().includes(inputValue.toLowerCase()),
               )
               .slice(0, 10)
               .map((book, index) => (
@@ -29,8 +30,8 @@ const BasicAutocomplete = ({ items, onChange }) => (
                   key={book.id}
                   style={{
                     backgroundColor:
-                      highlightedIndex === index ? "gray" : "white",
-                    fontWeight: selectedItem === book.title ? "bold" : "normal"
+                      highlightedIndex === index ? 'gray' : 'white',
+                    fontWeight: selectedItem === book.title ? 'bold' : 'normal',
                   }}
                 >
                   {book.title}
@@ -42,6 +43,11 @@ const BasicAutocomplete = ({ items, onChange }) => (
     )}
   </Downshift>
 );
+
+BasicAutocomplete.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 const Search = ({ data: { allBooks = [] } }) => (
   <BasicAutocomplete
@@ -58,5 +64,11 @@ const allBooksQuery = gql`
     }
   }
 `;
+
+Search.propTypes = {
+  data: PropTypes.shape({
+    allBooks: PropTypes.array,
+  }).isRequired,
+};
 
 export default graphql(allBooksQuery)(Search);

@@ -1,18 +1,20 @@
 import 'dotenv/config';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ApolloProvider } from 'react-apollo';
-import { ApolloClient, createNetworkInterface } from 'react-apollo';
+import {
+  ApolloProvider,
+  ApolloClient,
+  createNetworkInterface,
+} from 'react-apollo';
 
 import 'antd/dist/antd.css';
-
 import Routes from './routes';
 
 const networkInterface = createNetworkInterface({
   uri:
     process.env.ENVIRONMENT !== 'development'
       ? '/graphql'
-      : 'http://localhost:3000/graphql'
+      : 'http://localhost:3000/graphql',
 });
 
 networkInterface.use([
@@ -23,11 +25,11 @@ networkInterface.use([
       }
       req.options.headers['x-token'] = localStorage.getItem('token');
       req.options.headers['x-refresh-token'] = localStorage.getItem(
-        'refreshToken'
+        'refreshToken',
       );
       next();
-    }
-  }
+    },
+  },
 ]);
 
 networkInterface.useAfter([
@@ -42,12 +44,12 @@ networkInterface.useAfter([
         localStorage.setItem('refreshToken', refreshToken);
       }
       next();
-    }
-  }
+    },
+  },
 ]);
 
 const client = new ApolloClient({
-  networkInterface
+  networkInterface,
 });
 
 const App = () => (

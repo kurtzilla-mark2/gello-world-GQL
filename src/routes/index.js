@@ -1,21 +1,22 @@
-import React from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import decode from "jwt-decode";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import decode from 'jwt-decode';
 
-import Auth from "./Auth";
-import Home from "./Home";
-import Login from "./Login";
-import Register from "./Register";
-import Book from "./Book";
-import PageNotFound from "./PageNotFound";
-import Upload from "./Upload";
-import Champion from "./Champion";
-import Search from "./Search";
-import Search2 from "./Search2";
+import Auth from './Auth';
+import Home from './Home';
+import Login from './Login';
+import Register from './Register';
+import Book from './Book';
+import PageNotFound from './PageNotFound';
+import Upload from './Upload';
+import Champion from './Champion';
+import Search from './Search';
+import Search2 from './Search2';
 
 const checkAuth = () => {
-  const token = localStorage.getItem("token");
-  const refreshToken = localStorage.getItem("refreshToken");
+  const token = localStorage.getItem('token');
+  const refreshToken = localStorage.getItem('refreshToken');
   if (!token || !refreshToken) {
     return false;
   }
@@ -41,10 +42,14 @@ const AuthRoute = ({ component: Component, ...rest }) => (
       checkAuth() ? (
         <Component {...props} />
       ) : (
-        <Redirect to={{ pathname: "/login" }} />
+        <Redirect to={{ pathname: '/login' }} />
       )}
   />
 );
+
+AuthRoute.propTypes = {
+  component: PropTypes.shape.isRequired,
+};
 
 export default () => (
   <BrowserRouter>

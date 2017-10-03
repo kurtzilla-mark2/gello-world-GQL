@@ -1,33 +1,34 @@
-import React from "react";
-import { message, Button, Input, Checkbox } from "antd";
-import { gql, graphql } from "react-apollo";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Button, Input, Checkbox } from 'antd';
+import { gql, graphql } from 'react-apollo';
 
 class Register extends React.Component {
   state = {
-    username: "",
-    email: "",
-    password: "",
+    username: '',
+    email: '',
+    password: '',
     isAdmin: false,
-    errors: {}
+    errors: {},
   };
 
   onChange = e => {
-    if (e.target.name === "isAdmin") {
+    if (e.target.name === 'isAdmin') {
       this.setState({
-        [e.target.name]: e.target.checked
+        [e.target.name]: e.target.checked,
       });
     } else {
       this.setState({
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       });
     }
   };
 
   onSubmit = async () => {
     const response = await this.props.mutate({
-      variables: this.state
+      variables: this.state,
     });
-    console.log(response);
+    // console.log(response);
     const { register } = response.data;
     if (register.ok) {
       // register was successful
@@ -39,9 +40,10 @@ class Register extends React.Component {
       // pv = {}, cv = {path, message}
       this.setState({
         errors: register.errors.reduce((pv, cv) => {
-          pv[cv.path] = cv.message;
-          return pv;
-        }, {})
+          const prev = pv;
+          prev[cv.path] = cv.message;
+          return prev;
+        }, {}),
       });
     }
   };
@@ -55,7 +57,7 @@ class Register extends React.Component {
           onChange={e => this.onChange(e)}
           value={this.state.username}
         />
-        {this.state.errors["username"]}
+        {this.state.errors.username}
         <Input
           name="email"
           placeholder="Email"
@@ -109,5 +111,9 @@ const mutation = gql`
     }
   }
 `;
+
+Register.propTypes = {
+  mutate: PropTypes.func.isRequired,
+};
 
 export default graphql(mutation)(Register);

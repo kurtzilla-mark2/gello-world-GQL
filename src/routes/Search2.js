@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import { gql, graphql } from 'react-apollo';
 
@@ -38,7 +39,24 @@ const FetchItems = graphql(searchBooksQuery, {
   options: ({ title }) => ({ variables: { title } }),
 })(Items);
 
-const BasicAutocomplete = ({ items, onChange }) => (
+Items.propTypes = {
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    searchBooks: PropTypes.arrayOf(
+      PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
+      }).isRequired,
+    ).isRequired,
+  }).isRequired,
+  highlightedIndex: PropTypes.number.isRequired,
+  selectedItem: PropTypes.shape.isRequired,
+  getItemProps: PropTypes.func.isRequired,
+};
+
+const BasicAutocomplete = (
+  { items, onChange }, //eslint-disable-line
+) => (
   <Downshift onChange={onChange}>
     {({
       getInputProps,
@@ -64,6 +82,11 @@ const BasicAutocomplete = ({ items, onChange }) => (
     )}
   </Downshift>
 );
+
+BasicAutocomplete.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default () => (
   <BasicAutocomplete onChange={selectedItem => console.log(selectedItem)} />
